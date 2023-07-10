@@ -16,6 +16,13 @@ export const register = async (req, res) => {
       occupation,
     } = req.body;
 
+    /* Check if user already exists */
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(409).json({ message: 'User already exists' });
+    }
+
+    /* Hass the password */
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -49,14 +56,17 @@ export const register = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    /* Check if the user exists */
     const user = await User.findOne({ email: email });
     if (!user) return res.status(400).json({ message: "User does not exist." });
 
+    /* Compare password */
     const isMatch = await bcrypt.compare(password, user.password);
-
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials." });
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
+    /* Generate JWT */
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     delete user.password;
     res.status(200).json({ token, user });
   } catch (err) {
