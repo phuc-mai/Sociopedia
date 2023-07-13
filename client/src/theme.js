@@ -74,8 +74,10 @@ export const themeSettings = (mode) => {
             },
           }),
     },
+
     typography: {
-      fontFamily: ["Rubik", "sans-serif"].join(","),
+      fontFamily: ["Rubik", "sans-serif"].join(","), 
+      //The join(",") method is used to combine the font families into a comma-separated string
       fontSize: 12,
       h1: {
         fontFamily: ["Rubik", "sans-serif"].join(","),
