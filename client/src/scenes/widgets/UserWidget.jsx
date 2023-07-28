@@ -32,10 +32,10 @@ const UserWidget = ({ userId, picturePath }) => {
 
   useEffect(() => {
     getUser();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []); // This empty dependency array ensures the effect runs only once when the component mounts
 
   if (!user) {
-    return null;
+    return null; // If the user data is not available yet, return null (or a loading indicator)
   }
 
   const {

@@ -48,12 +48,14 @@ const initialValuesLogin = {
 
 const Form = () => {
   const [pageType, setPageType] = useState("login");
+  const isLogin = pageType === "login";
+  const isRegister = pageType === "register";
+
   const { palette } = useTheme();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const isNonMobile = useMediaQuery("(min-width:600px)");
-  const isLogin = pageType === "login";
-  const isRegister = pageType === "register";
 
   const register = async (values, onSubmitProps) => {
     // this allows us to send form info with image
@@ -98,7 +100,9 @@ const Form = () => {
   };
 
   const handleFormSubmit = async (values, onSubmitProps) => {
+    // If the form submission is for login (isLogin is true), call the login function
     if (isLogin) await login(values, onSubmitProps);
+    // If the form submission is for registration (isRegister is true), call the register function
     if (isRegister) await register(values, onSubmitProps);
   };
 

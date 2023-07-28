@@ -5,6 +5,7 @@ import User from '../models/User.js'
 /* REGISTER USER */
 export const register = async (req, res) => {
   try {
+    /* Take information from the form */
     const {
       firstName,
       lastName,
@@ -42,8 +43,10 @@ export const register = async (req, res) => {
 
     /* Save the new user to the database */
     const savedUser = await newUser.save();
+  
     /* Send a success response */
     res.status(200).json({ message: 'User registered successfully', user: savedUser });
+  
   } catch (err) {
     /* Handle any errors that occur during registration */
     res.status(500).json({ message: 'Registration failed', error: err.message });
@@ -54,6 +57,7 @@ export const register = async (req, res) => {
 /* LOG IN */
 export const login = async (req, res) => {
   try {
+    /* Take information from the form */
     const { email, password } = req.body;
 
     /* Check if the user exists */
@@ -64,8 +68,8 @@ export const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) return res.status(400).json({ message: "Invalid credentials." });
 
-    /* Generate JWT */
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    /* Generate JWT token */
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
     delete user.password;
     res.status(200).json({ token, user });
   } catch (err) {
